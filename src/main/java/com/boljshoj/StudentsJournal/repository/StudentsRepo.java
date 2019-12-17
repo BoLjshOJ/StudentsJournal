@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface StudentsRepo extends CrudRepository<Student, Long> {
-    List<Student> findByFullName(String fullName);
+    List<Student> findByGroupName(String groupName);
 }

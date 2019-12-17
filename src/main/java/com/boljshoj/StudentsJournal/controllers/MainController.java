@@ -1,5 +1,6 @@
 package com.boljshoj.StudentsJournal.controllers;
 
+import com.boljshoj.StudentsJournal.domain.Group;
 import com.boljshoj.StudentsJournal.domain.Student;
 import com.boljshoj.StudentsJournal.domain.User;
 import com.boljshoj.StudentsJournal.repository.StudentsRepo;
@@ -22,17 +23,21 @@ public class MainController {
     }
 
     @GetMapping("/index")
-    public String main(@RequestParam(required = false) String filter, Model model){
+    public String main(
+            @RequestParam(required = false) String filter,
+            Model model
+    ){
         Iterable<Student> students;
 
         if (filter != null && !filter.isEmpty()) {
-            students = studentsRepo.findByFullName(filter);
+            students = studentsRepo.findByGroupName(filter);
         } else {
             students = studentsRepo.findAll();
         }
 
         model.addAttribute("students", students);
         model.addAttribute("filter", filter);
+        model.addAttribute("groups", Group.values());
         return "index";
     }
 
@@ -40,12 +45,14 @@ public class MainController {
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam String fullName,
+            @RequestParam String group,
             Model model
     ) {
-        Student student = new Student(fullName, user);
+        Student student = new Student(fullName, user, group);
         studentsRepo.save(student);
         Iterable<Student> students = studentsRepo.findAll();
         model.addAttribute("students", students);
+        model.addAttribute("groups", Group.values());
         return "index";
     }
 }

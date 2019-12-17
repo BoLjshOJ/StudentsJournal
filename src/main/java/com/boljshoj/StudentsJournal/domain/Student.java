@@ -22,12 +22,15 @@ public class Student {
     @JoinColumn(name = "user_id")
     private User createdBy;
 
+    private String groupName;
+
     public Student() {
     }
 
-    public Student(String fullName, User user)
+    public Student(String fullName, User user, String group)
     {
-        this.createdBy = user;
         this.fullName = fullName;
+        this.createdBy = user;
+        this.groupName = group;
     }
 }
