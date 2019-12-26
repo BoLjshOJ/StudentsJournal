@@ -15,6 +15,7 @@ public class Student {
     private String fullName;
     private int successRunsOfTest;
     private int failedRunsOfTest;
+    private int totalTest;
     private String lastCommitMessage;
     private Date lastCommitTime;
 
@@ -32,5 +33,13 @@ public class Student {
         this.fullName = fullName;
         this.createdBy = user;
         this.groupName = group;
+    }
+
+    public String countSuccessPercent(){
+        double countSuccessPercent = 0.0;
+        if (totalTest != 0) {
+            countSuccessPercent = ((double) successRunsOfTest / (double) totalTest) * 100.0;
+        }
+        return String.format("%.0f", countSuccessPercent);
     }
 }
