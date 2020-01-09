@@ -3,7 +3,9 @@ package com.boljshoj.StudentsJournal.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -37,8 +39,8 @@ public class Student {
 
     public String countSuccessPercent(){
         double countSuccessPercent = 0.0;
-        if (totalTest != 0) {
-            countSuccessPercent = ((double) successRunsOfTest / (double) totalTest) * 100.0;
+        if (getTotalTest() != 0) {
+            countSuccessPercent = ((double) successRunsOfTest / (double) getTotalTest()) * 100.0;
         }
         return String.format("%.0f", countSuccessPercent);
     }

@@ -2,8 +2,10 @@ package com.boljshoj.StudentsJournal.controllers;
 
 import com.boljshoj.StudentsJournal.domain.Group;
 import com.boljshoj.StudentsJournal.domain.Student;
+import com.boljshoj.StudentsJournal.domain.Task;
 import com.boljshoj.StudentsJournal.domain.User;
 import com.boljshoj.StudentsJournal.repository.StudentsRepo;
+import com.boljshoj.StudentsJournal.repository.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ public class MainController {
     @Autowired
     private StudentsRepo studentsRepo;
 
+    @Autowired
+    private TaskRepo taskRepo;
+
     @GetMapping("/")
     public String startPage(Model model){
         return "startPage";
@@ -28,6 +33,7 @@ public class MainController {
             Model model
     ){
         Iterable<Student> students;
+        Iterable<Task> tasks = taskRepo.findAll();
 
         if (filter != null && !filter.isEmpty()) {
             students = studentsRepo.findByGroupName(filter);
@@ -38,6 +44,7 @@ public class MainController {
         model.addAttribute("students", students);
         model.addAttribute("filter", filter);
         model.addAttribute("groups", Group.values());
+        model.addAttribute("tasks", tasks);
         return "index";
     }
 
@@ -51,8 +58,10 @@ public class MainController {
         Student student = new Student(fullName, user, group);
         studentsRepo.save(student);
         Iterable<Student> students = studentsRepo.findAll();
+        Iterable<Task> tasks = taskRepo.findAll();
         model.addAttribute("students", students);
         model.addAttribute("groups", Group.values());
+        model.addAttribute("tasks", tasks);
         return "index";
     }
 }
