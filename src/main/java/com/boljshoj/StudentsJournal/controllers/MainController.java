@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Controller
 public class MainController {
@@ -79,9 +81,24 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/index/{student}")
+    public String updateDescision(@PathVariable Student student){
+        runCheckTests(student);
+        studentsRepo.save(student);
+        return "redirect:/index";
+    }
+
+    private void runCheckTests(@PathVariable Student student) {
+        //TODO
+        student.setSuccessRunsOfTest(ThreadLocalRandom.current().nextInt(getDistinctListOfTasks().size()));
+    }
+
     public void updateTotalCountTask(){
         for (Student s : studentsRepo.findAll()){
-            s.setTotalTest(taskRepo.findTasksByStudent(s).size());
+            int totalTasks = taskRepo.findTasksByStudent(s).size();
+            int successTasks = s.getSuccessRunsOfTest();
+            s.setTotalTest(totalTasks);
+            s.setFailedRunsOfTest(totalTasks - successTasks);
             studentsRepo.save(s);
         }
     }

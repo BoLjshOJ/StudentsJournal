@@ -56,7 +56,7 @@
                 <td><div class="progress-bar progress-bar-striped" role="progressbar" style="width: ${student.countSuccessPercent()}%" aria-valuenow="${student.countSuccessPercent()}" aria-valuemin="0" aria-valuemax="100">${student.countSuccessPercent()}%</div></td>
                 <td class="text-center"><a href="/errors/${student.id}">${student.getFailedRunsOfTest()}</a></td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-outline-success">Update</button>
+                    <a href="/index/${student.getId()}" class="btn btn-outline-success">Update</a>
                 </td>
             </tr>
         <#else>
