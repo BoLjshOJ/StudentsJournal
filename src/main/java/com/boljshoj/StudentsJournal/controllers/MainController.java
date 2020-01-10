@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 public class MainController {
     @Autowired
@@ -33,7 +38,6 @@ public class MainController {
             Model model
     ){
         Iterable<Student> students;
-        Iterable<Task> tasks = taskRepo.findAll();
 
         if (filter != null && !filter.isEmpty()) {
             students = studentsRepo.findByGroupName(filter);
@@ -41,10 +45,10 @@ public class MainController {
             students = studentsRepo.findAll();
         }
 
+        updateTotalCountTask();
         model.addAttribute("students", students);
         model.addAttribute("filter", filter);
         model.addAttribute("groups", Group.values());
-        model.addAttribute("tasks", tasks);
         return "index";
     }
 
@@ -56,12 +60,43 @@ public class MainController {
             Model model
     ) {
         Student student = new Student(fullName, user, group);
+
         studentsRepo.save(student);
+
+        if (getDistinctListOfTasks().size() > 0) {
+            if (taskRepo.findTasksByStudent(student).isEmpty() || taskRepo.findTasksByStudent(student).size() < getDistinctListOfTasks().size()) {
+                for (Task t : getDistinctListOfTasks()) {
+                    taskRepo.save(new Task(t.getTaskName(), t.getFileLocation(), student));
+                }
+            }
+        }
+
+        updateTotalCountTask();
         Iterable<Student> students = studentsRepo.findAll();
-        Iterable<Task> tasks = taskRepo.findAll();
+
         model.addAttribute("students", students);
         model.addAttribute("groups", Group.values());
-        model.addAttribute("tasks", tasks);
         return "index";
+    }
+
+    public void updateTotalCountTask(){
+        for (Student s : studentsRepo.findAll()){
+            s.setTotalTest(taskRepo.findTasksByStudent(s).size());
+            studentsRepo.save(s);
+        }
+    }
+
+    /** @noinspection Duplicates*/
+    public List<Task> getDistinctListOfTasks(){
+        Map<String, String> mapOfTaskAndTasklocation = new HashMap<>();
+
+        taskRepo.findAll().forEach(t -> mapOfTaskAndTasklocation.put(t.getTaskName(), t.getFileLocation()));
+
+        List<Task> listOfDistinctTask = new ArrayList<>();
+        for (Map.Entry<String, String> m : mapOfTaskAndTasklocation.entrySet()){
+            listOfDistinctTask.add(new Task(m.getKey(), m.getValue()));
+        }
+
+        return listOfDistinctTask;
     }
 }

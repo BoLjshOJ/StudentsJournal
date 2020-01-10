@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/tasks")
 public class TaskContoller {
@@ -23,7 +28,7 @@ public class TaskContoller {
 
     @GetMapping
     private String tasksList(Model model){
-        model.addAttribute("tasks", taskRepo.findAll());
+        model.addAttribute("tasks", getDistinctListOfTasks());
         return "tasks";
     }
 
@@ -39,8 +44,20 @@ public class TaskContoller {
             taskRepo.save(task);
         }
 
-        model.addAttribute("tasks", taskRepo.findAll());
+        model.addAttribute("tasks", getDistinctListOfTasks());
         return "tasks";
     }
 
+    public List<Task> getDistinctListOfTasks(){
+        Map<String, String> mapOfTaskAndTasklocation = new HashMap<>();
+
+        taskRepo.findAll().forEach(t -> mapOfTaskAndTasklocation.put(t.getTaskName(), t.getFileLocation()));
+
+        List<Task> listOfDistinctTask = new ArrayList<>();
+        for (Map.Entry<String, String> m : mapOfTaskAndTasklocation.entrySet()){
+            listOfDistinctTask.add(new Task(m.getKey(), m.getValue()));
+        }
+
+        return listOfDistinctTask;
+    }
 }

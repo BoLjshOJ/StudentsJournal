@@ -28,4 +28,9 @@ public class Task {
         this.fileLocation = fileLocation;
         this.student = student;
     }
+
+    public Task(String taskName, String fileLocation) {
+        this.taskName = taskName;
+        this.fileLocation = fileLocation;
+    }
 }
