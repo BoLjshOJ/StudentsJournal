@@ -4,6 +4,6 @@
     <div class="alert alert-info" role="alert">
     <h3>Create new user</h3>
     </div>
-<@l.login "/registration" />
+<@l.login "/registration" true/>
     ${message!}
 </@c.page>
