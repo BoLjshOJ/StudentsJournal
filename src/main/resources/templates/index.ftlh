@@ -60,7 +60,7 @@
                 </td>
             </tr>
         <#else>
-            No students
+
         </#list>
         </tbody>
     </table>

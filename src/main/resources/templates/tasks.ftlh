@@ -31,7 +31,7 @@
                 <td class="text-center">${task.getFileLocation()}</td>
             </tr>
         <#else>
-            <h3>No tasks</h3>
+
         </#list>
         </tbody>
     </table>
