@@ -16,7 +16,7 @@
                 <a class="nav-link" href="/tasks">Tasks</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/templates/errors">Errors</a>
+                <a class="nav-link" href="/errors">Errors</a>
             </li>
             <#if isAdmin>
             <li class="nav-item">
