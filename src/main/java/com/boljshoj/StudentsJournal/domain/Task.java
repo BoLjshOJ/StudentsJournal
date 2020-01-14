@@ -14,6 +14,7 @@ public class Task {
 
     private String taskName;
     private String fileLocation;
+    private String stackTrace;
     private boolean isResolved;
 
     @ManyToOne
@@ -32,5 +33,13 @@ public class Task {
     public Task(String taskName, String fileLocation) {
         this.taskName = taskName;
         this.fileLocation = fileLocation;
+    }
+
+    public String getLastCommitMessage(){
+        return getStudent().getLastCommitMessage();
+    }
+
+    public String getCommitDate(){
+        return getStudent().getStringFromCommitDate();
     }
 }

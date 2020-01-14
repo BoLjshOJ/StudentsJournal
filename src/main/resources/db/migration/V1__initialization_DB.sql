@@ -16,6 +16,7 @@ create table student (
 create table task (
     id int8 not null,
     file_location varchar(255),
+    stack_trace varchar(2048),
     is_resolved boolean not null,
     task_name varchar(255),
     student_id int8,

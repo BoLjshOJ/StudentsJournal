@@ -3,6 +3,7 @@ package com.boljshoj.StudentsJournal.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
@@ -41,5 +42,14 @@ public class Student {
             countSuccessPercent = ((double) successRunsOfTest / (double) getTotalTest()) * 100.0;
         }
         return String.format("%.0f", countSuccessPercent);
+    }
+
+    public String getStringFromCommitDate(){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        if (getLastCommitTime() == null){
+            return "";
+        } else {
+            return formatter.format(getLastCommitTime());
+        }
     }
 }

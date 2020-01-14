@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Controller
@@ -90,7 +87,37 @@ public class MainController {
 
     private void runCheckTests(@PathVariable Student student) {
         //TODO
-        student.setSuccessRunsOfTest(ThreadLocalRandom.current().nextInt(getDistinctListOfTasks().size()));
+        List<Task> tasks = taskRepo.findTasksByStudent(student);
+
+        for (Task t : tasks){
+            if (ThreadLocalRandom.current().nextInt(100) % 2 == 0){
+                t.setResolved(true);
+                t.setStackTrace("");
+            } else {
+                t.setStackTrace(generateRandomString());
+                t.setResolved(false);
+            }
+            taskRepo.save(t);
+        }
+        List<Task> errors = taskRepo.findTasksByStudentAndIsResolvedFalse(student);
+        student.setFailedRunsOfTest(errors.size());
+        student.setSuccessRunsOfTest(getDistinctListOfTasks().size() - errors.size());
+        student.setLastCommitMessage(generateRandomString());
+        student.setLastCommitTime(new Date());
+        studentsRepo.save(student);
+    }
+
+    private String generateRandomString() {
+       int leftLimit = 97;
+       int rigthLimit = 122;
+       int targetStringLength = 30;
+       Random random = new Random();
+       StringBuilder builder = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rigthLimit - leftLimit + 1));
+            builder.append((char) randomLimitedInt);
+        }
+       return builder.toString();
     }
 
     public void updateTotalCountTask(){
