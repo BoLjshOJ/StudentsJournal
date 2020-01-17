@@ -47,27 +47,46 @@ public class UserService implements UserDetailsService {
         user.setActivationCode(UUID.randomUUID().toString());
         userRepo.save(user);
 
-        sendMessage(user);
+        sendMessage(user, "activate");
 
         return true;
     }
 
-    private void sendMessage(User user) {
-        if (!StringUtils.isEmpty(user.getEmail())){
-            String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to StudentsJournal. To activate your account, please follow the link bellow \n" +
-                            "%s/activate/%s \n\n" +
-                            "Login: %s \n" +
-                            "Password: %s",
-                    user.getUsername(),
-                    hostname,
-                    user.getActivationCode(),
-                    user.getUsername(),
-                    user.getPassword()
-            );
-            mailSender.send(user.getEmail(), "Activation code", message);
+    private void sendMessage(User user, String operations) {
+        switch (operations) {
+            case "activate":
+                if (!StringUtils.isEmpty(user.getEmail())){
+                    String message = String.format(
+                            "Hello, %s! \n" +
+                                    "Welcome to StudentsJournal. To activate your account, please follow the link bellow \n" +
+                                    "%s/activate/%s \n\n" +
+                                    "Login: %s \n" +
+                                    "Password: %s",
+                            user.getUsername(),
+                            hostname,
+                            user.getActivationCode(),
+                            user.getUsername(),
+                            user.getPassword()
+                    );
+                    mailSender.send(user.getEmail(), "Activation code", message);
+                }
+                break;
+            case "update":
+                if (!StringUtils.isEmpty(user.getEmail())){
+                    String message = String.format(
+                            "Hello, %s! \n" +
+                                    "You just now update your information \n\n" +
+                                    "Login: %s \n" +
+                                    "Password: %s",
+                            user.getUsername(),
+                            user.getUsername(),
+                            user.getPassword()
+                    );
+                    mailSender.send(user.getEmail(), "Update information", message);
+                }
+                break;
         }
+
     }
 
     public boolean activateUser(String code) {
@@ -107,6 +126,7 @@ public class UserService implements UserDetailsService {
 
     public void updateProfile(User user, String password, String email) {
         String userEmail = user.getEmail();
+        String userPassword = user.getPassword();
 
         boolean isEmailChanged = (email != null && !email.equals(userEmail)) || (userEmail != null && !userEmail.equals(email));
 
@@ -117,14 +137,16 @@ public class UserService implements UserDetailsService {
             }
         }
 
+        boolean isPasswordChanged = (password != null && !password.equals(userPassword)) || (userPassword != null && !userPassword.equals(password));
+
         if (!StringUtils.isEmpty(password)){
             user.setPassword(password);
         }
 
         userRepo.save(user);
 
-        if (isEmailChanged) {
-            sendMessage(user);
+        if (isEmailChanged || isPasswordChanged) {
+            sendMessage(user, "update");
         }
     }
 }
