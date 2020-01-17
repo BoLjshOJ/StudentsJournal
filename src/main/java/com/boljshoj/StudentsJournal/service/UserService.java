@@ -22,8 +22,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private MailSender mailSender;
 
-    @Value("host")
-    private String host;
+    @Value("${heroku.hostname}")
+    private String hostname;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
                             "Login: %s \n" +
                             "Password: %s",
                     user.getUsername(),
-                    host,
+                    hostname,
                     user.getActivationCode(),
                     user.getUsername(),
                     user.getPassword()
