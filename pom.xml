@@ -10,13 +10,9 @@
 	</parent>
 	<groupId>com.boljshoj</groupId>
 	<artifactId>StudentsJournal</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<name>StudentsJournal</name>
 	<description>project for ITMO diplom</description>
-
-	<properties>
-		<java.version>11</java.version>
-	</properties>
 
 	<dependencies>
 		<!-- Spring -->

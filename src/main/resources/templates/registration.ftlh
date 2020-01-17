@@ -5,5 +5,9 @@
     <h3>Create new user</h3>
     </div>
 <@l.login "/registration" true/>
-    ${message!}
+    <#if message??>
+        <div class="alert alert-danger my-3" role="alert">
+          ${message!}
+        </div>
+    </#if>
 </@c.page>

@@ -20,6 +20,15 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Controller
 public class MainController {
+    private final String stackTrace = "[ERROR] Tests run: 4, Failures: 3, Errors: 1, Skipped: 0, Time elapsed: 0.401 s <<< FAILURE! - in com.ifmo.lesson6.LinkedListTest\n" +
+            "[ERROR] shouldDoAddGetRemove Time elapsed: 0.272 s <<< FAILURE!\n" +
+            "org.opentest4j.AssertionFailedError: Wrong item on index = 0 ==> expected: but was:\n" +
+            "at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)\n" +
+            "at org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)\n" +
+            "at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)\n" +
+            "at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1135)\n" +
+            "at com.ifmo.lesson6.assertions.AssertList.assertListValid(AssertList.java:23)";
+
     @Autowired
     private StudentsRepo studentsRepo;
 
@@ -87,6 +96,7 @@ public class MainController {
 
     private void runCheckTests(@PathVariable Student student) {
         //TODO
+
         List<Task> tasks = taskRepo.findTasksByStudent(student);
 
         for (Task t : tasks){
@@ -94,7 +104,7 @@ public class MainController {
                 t.setResolved(true);
                 t.setStackTrace("");
             } else {
-                t.setStackTrace(generateRandomString());
+                t.setStackTrace(stackTrace);
                 t.setResolved(false);
             }
             taskRepo.save(t);
@@ -123,9 +133,10 @@ public class MainController {
     public void updateTotalCountTask(){
         for (Student s : studentsRepo.findAll()){
             int totalTasks = taskRepo.findTasksByStudent(s).size();
-            int successTasks = s.getSuccessRunsOfTest();
+            int successTasks = taskRepo.findTasksByStudentAndIsResolvedTrue(s).size();
             s.setTotalTest(totalTasks);
             s.setFailedRunsOfTest(totalTasks - successTasks);
+            s.setSuccessRunsOfTest(successTasks);
             studentsRepo.save(s);
         }
     }

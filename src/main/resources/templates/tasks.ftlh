@@ -29,6 +29,9 @@
             <tr>
                 <th scope="row" class="text-center">${task.getTaskName()}</th>
                 <td class="text-center">${task.getFileLocation()}</td>
+                <#if isAdmin>
+                    <td class="text-center"><a href="/tasks/${task.getTaskName()!}" class="btn btn-danger stretched-link">remove</a></td>
+                </#if>
             </tr>
         <#else>
 

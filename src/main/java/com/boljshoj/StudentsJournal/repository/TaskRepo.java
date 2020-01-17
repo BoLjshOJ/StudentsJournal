@@ -10,4 +10,8 @@ public interface TaskRepo extends CrudRepository<Task, Long> {
     List<Task> findTasksByStudent(Student student);
 
     List<Task> findTasksByStudentAndIsResolvedFalse (Student student);
+
+    List<Task> findTasksByTaskName(String taskName);
+
+    List<Task> findTasksByStudentAndIsResolvedTrue (Student student);
 }

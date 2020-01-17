@@ -2,7 +2,8 @@ package com.boljshoj.StudentsJournal.domain;
 
 public enum  Group {
     Сбербанк,
-    ИТМО,
     Альфабанк,
-    ВТБ24
+    ВТБ24,
+    ИТМО,
+    СпбГУЭиФ
 }

@@ -35,7 +35,6 @@
     <table class="table table-hover my-5">
         <thead>
         <tr>
-            <th scope="col" class="text-center">ID</th>
             <th scope="col" class="text-center">ФИО</th>
             <th scope="col" class="text-center">Группа</th>
             <th scope="col" class="text-center">Решено задач</th>
@@ -48,8 +47,7 @@
         <tbody>
         <#list students as student>
             <tr>
-                <th scope="row" class="text-center">${student.getId()}</th>
-                <td class="text-center">${student.getFullName()}</td>
+                <td scope="row" class="text-center">${student.getFullName()}</td>
                 <td class="text-center">${student.getGroupName()}</td>
                 <td class="text-center">${student.getSuccessRunsOfTest()}</td>
                 <td class="text-center">${student.getTotalTest()}</td>

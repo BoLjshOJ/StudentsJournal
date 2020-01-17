@@ -5,7 +5,7 @@ create table student (
     failed_runs_of_test int4 not null,
     full_name varchar(255),
     group_name varchar(255),
-    last_commit_message varchar(255),
+    last_commit_message varchar(999999),
     last_commit_time timestamp,
     success_runs_of_test int4 not null,
     total_test int4 not null,
@@ -16,7 +16,7 @@ create table student (
 create table task (
     id int8 not null,
     file_location varchar(255),
-    stack_trace varchar(2048),
+    stack_trace varchar(999999),
     is_resolved boolean not null,
     task_name varchar(255),
     student_id int8,

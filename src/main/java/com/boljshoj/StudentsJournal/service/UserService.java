@@ -4,6 +4,7 @@ import com.boljshoj.StudentsJournal.domain.Role;
 import com.boljshoj.StudentsJournal.domain.User;
 import com.boljshoj.StudentsJournal.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,9 +22,17 @@ public class UserService implements UserDetailsService {
     @Autowired
     private MailSender mailSender;
 
+    @Value("host")
+    private String host;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username);
+        if (user == null){
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return user;
     }
 
     public boolean addUser(User user){
@@ -48,10 +57,11 @@ public class UserService implements UserDetailsService {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to StudentsJournal. To activate your account, please follow the link bellow \n" +
-                            "http://localhost:8080/activate/%s \n\n" +
+                            "%s/activate/%s \n\n" +
                             "Login: %s \n" +
                             "Password: %s",
                     user.getUsername(),
+                    host,
                     user.getActivationCode(),
                     user.getUsername(),
                     user.getPassword()

@@ -7,10 +7,7 @@ import com.boljshoj.StudentsJournal.repository.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +41,17 @@ public class TaskContoller {
             taskRepo.save(task);
         }
 
+        model.addAttribute("tasks", getDistinctListOfTasks());
+        return "tasks";
+    }
+
+    @GetMapping("{taskName}")
+    public String removeTask(
+            @PathVariable String taskName,
+            Model model
+    ){
+        List<Task> tasksByTaskName = taskRepo.findTasksByTaskName(taskName);
+        taskRepo.deleteAll(tasksByTaskName);
         model.addAttribute("tasks", getDistinctListOfTasks());
         return "tasks";
     }
