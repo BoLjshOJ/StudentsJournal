@@ -48,9 +48,13 @@ public class UserService implements UserDetailsService {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to StudentsJournal. To activate your account, please follow the link bellow \n" +
-                            "http://localhost:8080/activate/%s",
+                            "http://localhost:8080/activate/%s \n\n" +
+                            "Login: %s \n" +
+                            "Password: %s",
                     user.getUsername(),
-                    user.getActivationCode()
+                    user.getActivationCode(),
+                    user.getUsername(),
+                    user.getPassword()
             );
             mailSender.send(user.getEmail(), "Activation code", message);
         }
